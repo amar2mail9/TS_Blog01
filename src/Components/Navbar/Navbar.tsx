@@ -7,7 +7,7 @@ import axios from "axios";
 import { TbMessageCircleFilled } from "react-icons/tb";
 import { TiThMenu } from "react-icons/ti";
 import { Link, useLocation } from "react-router-dom";
-import { IPosts } from "../models/Posts";
+import { IPost, IPosts } from "../models/Posts";
 
 interface IMenu {
   icon: React.ReactNode;
@@ -27,10 +27,7 @@ const Navbar: React.FC = () => {
     showSearch: false,
     showSearchResult: false,
   });
-
-  const [posts, setPosts] = useState<IPosts>({
-    posts: [],
-  });
+  const [posts, setPosts] = useState<IPosts>({ posts: [] });
   const [searchQuery, setSearchQuery] = useState({
     value: "",
   });
@@ -66,22 +63,22 @@ const Navbar: React.FC = () => {
   const handleToggleSearch = (): void => {
     setState({ showSearch: !state.showSearch });
   };
-
   const fetchPosts = async (endPoints: string) => {
     try {
-      let res = await axios.get(`https://dummyjson.com/${endPoints}?limit=0`);
-
-      if (res) {
-        setPosts({ ...posts, posts: res.data.posts });
+      let res = await axios.get<{ posts: IPost[] }>( // my Error
+        `https://dummyjson.com/${endPoints}?limit=0`
+      );
+      if (res.data) {
+        setPosts({ posts: res.data.posts });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const filterPosts = posts.posts.filter((post) => {
-    return post.title.toLowerCase().includes(searchQuery.value.toLowerCase());
-  });
+  const filterPosts = posts.posts.filter((post) =>
+    post.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
 
   useEffect(() => {
     fetchPosts("posts");

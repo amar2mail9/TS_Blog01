@@ -1,3 +1,8 @@
+export interface IPost {
+  id: number;
+  title: string;
+}
+
 export interface IPosts {
-  posts: [];
+  posts: IPost[];
 }

@@ -29,15 +29,18 @@ const GetAllBlogs: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [limit, setLimit] = useState(10);
   const [loading, setLoading] = useState<isLoading>({ state: false });
-  // Fetch all blogs from API
+
   const fetchBlogs = async () => {
     setLoading({ state: true });
     try {
-      const res = await axios.get(`https://dummyjson.com/posts?limit=${limit}`);
-      setBlogs(res.data.posts); // Assuming the posts array is in `res.data.posts`
-      setLoading({ state: false });
+      const res = await axios.get<{ posts: Blog[] }>(
+        `https://dummyjson.com/posts?limit=${limit}`
+      );
+      setBlogs(res.data.posts);
     } catch (error) {
       console.error("Error fetching blogs:", error);
+    } finally {
+      setLoading({ state: false });
     }
   };
 

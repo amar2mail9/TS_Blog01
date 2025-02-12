@@ -24,9 +24,11 @@ const HeroSection03: React.FC = () => {
 
   const fetchBlogs = async () => {
     try {
-      const res = await axios.get(`https://dummyjson.com/posts?limit=4`);
+      const res = await axios.get<{ posts: Blog[] }>(
+        `https://dummyjson.com/posts?limit=4`
+      );
       console.log(res);
-      setBlogs(res.data.posts); // Set blogs from the API response correctly
+      setBlogs(res.data.posts);
     } catch (error) {
       console.error("Error fetching blogs:", error);
     }

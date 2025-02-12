@@ -20,7 +20,7 @@ const SingleBlog: React.FC = () => {
   // Fetch the post details by ID
   const fetchPost = async () => {
     try {
-      const res = await axios.get(`https://dummyjson.com/posts/${id}`);
+      const res = await axios.get<IPost>(`https://dummyjson.com/posts/${id}`);
       setPost(res.data);
     } catch (error) {
       console.error("Error fetching the post:", error);

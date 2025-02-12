@@ -2,18 +2,23 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
+interface IPost {
+  id: number;
+  title: string;
+  body: string;
+  imageUrl?: string;
+}
+
 const HeroSection01: React.FC = () => {
-  const [posts, setPosts] = useState<any[]>([]); // Array to hold posts
+  const [posts, setPosts] = useState<IPost[]>([]); // Array to hold posts
 
   const fetchPosts = async (endPoint: string) => {
     try {
-      const res = await axios.get(`https://dummyjson.com${endPoint}`);
+      const res = await axios.get<{ posts: IPost[] }>(
+        `https://dummyjson.com${endPoint}`
+      );
       if (res) {
         setPosts(res.data.posts); // Directly set the posts array
       }

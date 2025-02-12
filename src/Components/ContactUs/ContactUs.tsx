@@ -1,38 +1,8 @@
-import React, { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
+import React from "react";
 import Layout from "../Layout/Layout";
 import { motion } from "framer-motion"; // Import motion from framer-motion
 
-interface SendStatus {
-  status: boolean;
-}
-
 const ContactUs: React.FC = () => {
-  const form = useRef();
-  const [status, setStatus] = useState<string>("");
-  const [isSending, setIsSending] = useState<SendStatus>({ status: false });
-
-  const sendEmail = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSending({ status: true });
-
-    emailjs
-      .sendForm("service_xdmgoee", "template_q07zquf", form.current, {
-        publicKey: "A3oH0Uunjh7IvfbjQ",
-      })
-      .then(
-        () => {
-          setStatus("SUCCESS!");
-          setIsSending({ status: false });
-          form.current.reset(); // Clear form after success
-        },
-        (error) => {
-          setStatus(`FAILED... ${error.text}`);
-          setIsSending({ status: false });
-        }
-      );
-  };
-
   return (
     <Layout>
       <motion.div
@@ -45,8 +15,6 @@ const ContactUs: React.FC = () => {
         </h1>
 
         <motion.form
-          ref={form}
-          onSubmit={sendEmail}
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, type: "spring", stiffness: 50 }} // Slide in and fade-in effect for the form
@@ -88,28 +56,14 @@ const ContactUs: React.FC = () => {
           </div>
 
           <motion.button
-            type="submit"
+            type="button" // Changed from submit to button since it's UI-only
             className="w-full p-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            disabled={isSending.status} // Disable the button while sending
           >
-            {isSending.status ? "Sending..." : "Send"}
+            Send
           </motion.button>
         </motion.form>
-
-        {status && (
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className={`text-center text-lg font-semibold mt-4 ${
-              status.includes("SUCCESS") ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {status}
-          </motion.div>
-        )}
       </motion.div>
     </Layout>
   );
